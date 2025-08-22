@@ -58,8 +58,7 @@ fun PlayerCard(modifier: Modifier = Modifier, lp: Int = 20){
                 text = lp.toString(),
                 style = MaterialTheme.typography.titleLarge
             )
-            Spacer(Modifier.height(2.dp))
-            Spacer(Modifier.width(30.dp))
+            Spacer(Modifier.height(2.dp).width(30.dp))
             Text(
                 text = "❤",
                 style = MaterialTheme.typography.bodySmall,
@@ -80,6 +79,7 @@ fun PlayerCardPreview() {
 fun CardRow(lp: Int = 20, padding: PaddingValues) {
     Row (
         horizontalArrangement = Arrangement.SpaceEvenly,
+        modifier = Modifier.fillMaxWidth()
     ) {
         PlayerCard(
             lp = lp,
@@ -101,7 +101,8 @@ fun CardRowPreview() {
 
 @Composable
 fun CardRowStack(lp: Int = 20, padding: PaddingValues) {
-    Column {
+    Column (Modifier.fillMaxHeight(),
+        verticalArrangement = Arrangement.SpaceEvenly) {
         CardRow(lp = 20, padding = padding)
         CardRow(lp = 20, padding = padding)
     }
