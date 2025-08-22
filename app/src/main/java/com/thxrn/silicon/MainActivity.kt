@@ -4,9 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.core.withInfiniteAnimationFrameNanos
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -38,38 +40,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             SiliconTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Column(verticalArrangement = Arrangement.Center,
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        Row(
-                            horizontalArrangement = Arrangement.SpaceEvenly,
-                            modifier = Modifier.fillMaxHeight(),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            PlayerCard(
-                                modifier = Modifier.padding(innerPadding)
-                            )
-                            Spacer(Modifier.width(5.dp))
-                            PlayerCard(
-                                modifier = Modifier.padding(innerPadding)
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(5.dp))
-                        Row(
-                            horizontalArrangement = Arrangement.SpaceEvenly,
-                            modifier = Modifier.fillMaxHeight(),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            PlayerCard(
-                                modifier = Modifier.padding(innerPadding)
-                            )
-                            Spacer(Modifier.width(5.dp))
-                            PlayerCard(
-                                modifier = Modifier.padding(innerPadding)
-                            )
-                        }
-                    }
+                    CardRowStack(lp = 20, innerPadding)
                 }
             }
         }
@@ -79,12 +50,16 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun PlayerCard(modifier: Modifier = Modifier, lp: Int = 20){
     Surface(modifier = modifier) {
-        Column (horizontalAlignment = Alignment.CenterHorizontally) {
+        Column (
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceEvenly
+        ) {
             Text(
                 text = lp.toString(),
                 style = MaterialTheme.typography.titleLarge
             )
-            Spacer(Modifier.height(3.dp))
+            Spacer(Modifier.height(2.dp))
+            Spacer(Modifier.width(30.dp))
             Text(
                 text = "❤",
                 style = MaterialTheme.typography.bodySmall,
@@ -98,5 +73,44 @@ fun PlayerCard(modifier: Modifier = Modifier, lp: Int = 20){
 fun PlayerCardPreview() {
     SiliconTheme {
         PlayerCard(lp = 20)
+    }
+}
+
+@Composable
+fun CardRow(lp: Int = 20, padding: PaddingValues) {
+    Row (
+        horizontalArrangement = Arrangement.SpaceEvenly,
+    ) {
+        PlayerCard(
+            lp = lp,
+            modifier = Modifier.padding(padding)
+        )
+        Spacer(Modifier.width(5.dp))
+        PlayerCard(
+            lp = lp,
+            modifier = Modifier.padding(padding)
+        )
+    }
+}
+
+@Preview
+@Composable
+fun CardRowPreview() {
+    CardRow(lp = 20, padding = PaddingValues(5.dp))
+}
+
+@Composable
+fun CardRowStack(lp: Int = 20, padding: PaddingValues) {
+    Column {
+        CardRow(lp = 20, padding = padding)
+        CardRow(lp = 20, padding = padding)
+    }
+}
+
+@Preview
+@Composable
+fun CardRowStackPreview() {
+    SiliconTheme {
+        CardRowStack(lp = 20, padding = PaddingValues(10.dp))
     }
 }
