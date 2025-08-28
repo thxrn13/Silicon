@@ -8,6 +8,7 @@ import androidx.compose.animation.core.withInfiniteAnimationFrameNanos
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,9 +24,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.VectorProperty
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
@@ -39,8 +43,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SiliconTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    CardRowStack(lp = 20, innerPadding)
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                        CardRowStack(lp = 20, )
+                    }
                 }
             }
         }
@@ -48,17 +54,17 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun PlayerCard(modifier: Modifier = Modifier, lp: Int = 20){
-    Surface(modifier = modifier) {
+fun PlayerCard(modifier: Modifier = Modifier, lp: Int = 20, rotation: Float = 90f){
+    Surface(modifier = modifier.fillMaxSize()) {
         Column (
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceEvenly
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.rotate(rotation)
         ) {
             Text(
-                text = lp.toString(),
-                style = MaterialTheme.typography.titleLarge
-            )
-            Spacer(Modifier.height(2.dp).width(30.dp))
+                    text = lp.toString(),
+                    style = MaterialTheme.typography.titleLarge,
+                )
             Text(
                 text = "❤",
                 style = MaterialTheme.typography.bodySmall,
@@ -76,19 +82,20 @@ fun PlayerCardPreview() {
 }
 
 @Composable
-fun CardRow(lp: Int = 20, padding: PaddingValues) {
+fun CardRow(lp: Int = 20, modifier: Modifier = Modifier) {
     Row (
         horizontalArrangement = Arrangement.SpaceEvenly,
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier
     ) {
         PlayerCard(
             lp = lp,
-            modifier = Modifier.padding(padding)
+            modifier = modifier,
+            rotation = 90f
         )
-        Spacer(Modifier.width(5.dp))
         PlayerCard(
             lp = lp,
-            modifier = Modifier.padding(padding)
+            modifier = modifier,
+            rotation = -90f
         )
     }
 }
@@ -96,15 +103,14 @@ fun CardRow(lp: Int = 20, padding: PaddingValues) {
 @Preview
 @Composable
 fun CardRowPreview() {
-    CardRow(lp = 20, padding = PaddingValues(5.dp))
+    CardRow(lp = 20)
 }
 
 @Composable
-fun CardRowStack(lp: Int = 20, padding: PaddingValues) {
-    Column (Modifier.fillMaxHeight(),
-        verticalArrangement = Arrangement.SpaceEvenly) {
-        CardRow(lp = 20, padding = padding)
-        CardRow(lp = 20, padding = padding)
+fun CardRowStack(lp: Int = 20) {
+    Column (modifier = Modifier.fillMaxSize()) {
+        CardRow(lp = lp, modifier = Modifier.weight(.5f))
+        CardRow(lp = lp, modifier = Modifier.weight(.5f))
     }
 }
 
@@ -112,6 +118,6 @@ fun CardRowStack(lp: Int = 20, padding: PaddingValues) {
 @Composable
 fun CardRowStackPreview() {
     SiliconTheme {
-        CardRowStack(lp = 20, padding = PaddingValues(10.dp))
+        CardRowStack(lp = 20)
     }
 }
